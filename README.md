@@ -1,2 +1,3 @@
-# 6.175-build
-This is lab and project implemented based on MIT 6.175 17Spr
+# 6.175
+MIT 6.175: Constructive Computer Architecture 2016 Fall
+
