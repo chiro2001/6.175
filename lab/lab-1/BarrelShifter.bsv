@@ -15,7 +15,11 @@ function Bit#(32) shiftRightPow2(Bit#(1) en, Bit#(32) unshifted, Integer power);
     end
 endfunction
 
-// Exercise 6
+// Exercise 6 (2017)
 function Bit#(32) barrelShifterRight(Bit#(32) in, Bit#(5) shiftBy);
-
+    Bit#(32) shifted = in;
+    for(Integer i = 0; i < 5; i = i + 1) begin
+        shifted = shiftRightPow2(shiftBy[i], shifted, i);
+    end
+    return shifted;
 endfunction
