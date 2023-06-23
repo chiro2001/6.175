@@ -1,17 +1,17 @@
 import Multiplexer::*;
 
 function Bit#(1) fa_sum(Bit#(1) a, Bit#(1) b, Bit#(1) c);
-    return a^b^c;
+    return a ^ b ^ c;
 endfunction
 
 function Bit#(1) fa_carry(Bit#(1) a, Bit#(1) b, Bit#(1) c);
-    return (a&b)|(a&c)|(b&c);
+    return (a & b) | (a & c) | (b & c);
 endfunction
 
-function Bit#(TAdd#(n,1)) addN(Bit#(n) a, Bit#(n) b, Bit#(1) c0);
+function Bit#(TAdd#(n, 1)) addN(Bit#(n) a, Bit#(n) b, Bit#(1) c0);
     Bit#(n) s;
-    Bit#(1) c=c0;
-    for(Integer i = 0; i < valueOf(n); i=i+1) begin
+    Bit#(1) c = c0;
+    for (Integer i = 0; i < valueOf(n); i = i + 1) begin
         s[i] = fa_sum(a[i], b[i], c);
         c = fa_carry(a[i], b[i], c);
     end
