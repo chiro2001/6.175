@@ -16,29 +16,32 @@ import RevertingVirtualReg::*;
 
 typedef Vector#(n, Reg#(t)) Ehr#(numeric type n, type t);
 
-module mkEhr( t initVal, Ehr#(n,t) ifc ) provisos(Bits#(t, tSz));
-    Reg#(t) ehrReg <- mkReg( initVal );
+module mkEhr(t initVal, Ehr#(n, t) ifc) provisos(Bits#(t, tSz));
+    Reg#(t) ehrReg <- mkReg(initVal);
 
     // Allows read(i+1) to be in the same cycle as write(i)
-    Vector#(n, RWire#(t)) wires <- replicateM( mkUnsafeRWire );
+    Vector#(n, RWire#(t)) wires <- replicateM(mkUnsafeRWire);
 
     // Additional objects to force the requested schedule
     // These will both be optimized out during FPGA synthesis
-    Vector#(n, Reg#(Bool)) virtual_reg <- replicateM( mkRevertingVirtualReg(False) );
-    Vector#(n, RWire#(t)) ignored_wires <- replicateM( mkUnsafeRWire );
+    Vector#(n, Reg#(Bool)) virtual_reg <- replicateM(mkRevertingVirtualReg(False));
+    Vector#(n, RWire#(t)) ignored_wires <- replicateM(mkUnsafeRWire);
 
     Ehr#(n,t) ifc_to_return;
 
     rule canonicalize;
         t val = ehrReg;
-        for( Integer i = 0 ; i < valueOf(n) ; i = i + 1 ) begin
-            val = fromMaybe( val, wires[i].wget );
+        for (Integer i = 0; i < valueOf(n) ; i = i + 1) begin
+            // Chiro: `fromMaybe(defaultValue, maybeValue)' = `maybeValue' if `maybeValue' is `Valid', `defaultValue' otherwise
+            val = fromMaybe(val, wires[i].wget);
         end
         ehrReg <= val;
     endrule
 
-    for( Integer i = 0 ; i < valueOf(n) ; i = i + 1 ) begin
+    for (Integer i = 0 ; i < valueOf(n) ; i = i + 1) begin
         ifc_to_return[i] =
+            // Chiro: interfaces are also "return values" in BSV, 
+            // Chiro: like "anomymous classes" in Java
             (interface Reg;
                 method Action _write(t x);
                     // Performs write
@@ -46,8 +49,8 @@ module mkEhr( t initVal, Ehr#(n,t) ifc ) provisos(Bits#(t, tSz));
 
                     // Ensures write j < write i for j < i
                     t ignore = ehrReg;
-                    for( Integer j = 0 ; j < i ; j = j+1 ) begin
-                        ignore = fromMaybe( ignore, wires[j].wget );
+                    for (Integer j = 0; j < i ; j = j + 1) begin
+                        ignore = fromMaybe(ignore, wires[j].wget);
                     end
                     // Do something with ignore so the compiler doesn't optimize it out
                     ignored_wires[i].wset(ignore);
@@ -59,14 +62,16 @@ module mkEhr( t initVal, Ehr#(n,t) ifc ) provisos(Bits#(t, tSz));
                     // Gets the value to return
                     // Also ensures that write j < read i for j < i
                     t val = ehrReg;
-                    for( Integer j = 0 ; j < i ; j = j+1 ) begin
-                        val = fromMaybe( val, wires[j].wget );
+                    for (Integer j = 0; j < i ; j = j + 1) begin
+                        val = fromMaybe(val, wires[j].wget);
                     end
 
                     // Helps ensure that read i < write j for i <= j
-                    for( Integer j = i ; j < valueOf(n) ; j = j+1 ) begin
-                        if( virtual_reg[j] ) begin
+                    for (Integer j = i; j < valueOf(n) ; j = j + 1) begin
+                        if (virtual_reg[j]) begin
                             // This is impossible because virtual_reg will always be False when read
+                            // Chiro: `mkRevertingVirtualReg' creates regs that revert to their initial value in every cycle
+                            // Chiro: BSV Reference Guide, P219
                             val = unpack(0);
                         end
                     end
@@ -79,8 +84,8 @@ module mkEhr( t initVal, Ehr#(n,t) ifc ) provisos(Bits#(t, tSz));
     return ifc_to_return;
 endmodule
 
-module mkEhrU( Ehr#(n,t) ) provisos(Bits#(t, tSz));
-    let m <- mkEhr( ? );
+module mkEhrU(Ehr#(n, t)) provisos(Bits#(t, tSz));
+    let m <- mkEhr(?);
     return m;
 endmodule
 

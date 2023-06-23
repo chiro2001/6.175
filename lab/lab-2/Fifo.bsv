@@ -1,6 +1,8 @@
 import Ehr::*;
 import Vector::*;
 import FIFO::*;
+import FIFOF::*;
+import SpecialFIFOs::*;
 
 interface Fifo#(numeric type n, type t);
     method Action enq(t x);
@@ -9,24 +11,184 @@ interface Fifo#(numeric type n, type t);
     method Bool notEmpty;
 endinterface
 
+// `C' = Conflict. enq and deq cannot be ready in the same cycle
+module mkCFifo1(Fifo#(1, t)) provisos (Bits#(t, tSz));
+    // donot init this register
+    Reg#(t) data <- mkRegU;
+    Reg#(Bool) valid <- mkReg(False);
+    method Action enq(t x) if (!valid);
+        data <= x;
+        valid <= True;
+    endmethod
+    method Action deq if (valid);
+        valid <= False;
+    endmethod
+    method t first if (valid);
+        return data;
+    endmethod
+    method Bool notEmpty;
+        return valid;
+    endmethod
+endmodule
+
+module mkCFifo3(Fifo#(3, t)) provisos (Bits#(t, tSz));
+    // Vector#(3, Fifo#(1, t)) fifos <- replicateM(mkCFifo1);
+    Vector#(3, Fifo#(1, t)) fifos <- replicateM(mkPipelineFifo);
+    // Vector#(3, Fifo#(2, t)) fifos <- replicateM(mkCFFifo);
+    function Bool indexNotEmpty(Integer i);
+        return fifos[i].notEmpty;
+    endfunction
+    Vector#(3, Integer) indexing = genVector;
+    Bool fifoNotEmpty = unpack(|pack(map(indexNotEmpty, indexing)));
+    // Bool fifoNotFull = unpack(&pack(map(indexNotEmpty, indexing)));
+    Vector#(3, Wire#(Bool)) blocking <- replicateM(mkDWire(False));
+
+    for (Integer i = 1; i < 3; i = i + 1) begin
+        rule pipeline if (!blocking[i - 1]);
+            fifos[i].enq(fifos[i - 1].first);
+            fifos[i - 1].deq;
+        endrule
+    end
+    
+    method Action enq(t x);
+        fifos[0].enq(x);
+    endmethod
+
+    method t first if (fifoNotEmpty);
+        t result = unpack('0);
+        for (Integer i = 0; i < 3; i = i + 1) begin
+            if (indexNotEmpty(i)) begin
+                result = fifos[i].first;
+            end
+        end
+        return result;
+    endmethod
+    method Action deq if (fifoNotEmpty);
+        Bool poped = False;
+        for (Integer i = 2; i >= 0; i = i - 1) begin
+            if (indexNotEmpty(i) && !poped) begin
+                fifos[i].deq;
+                poped = True;
+                blocking[i] <= True;
+            end
+        end
+    endmethod
+
+    method Bool notEmpty;
+        return fifoNotEmpty;
+    endmethod
+endmodule
+
+// `CF' = Conflict Free
+module mkCFBypassFifo3(Fifo#(3, t)) provisos (Bits#(t, tSz));
+    FIFOF#(t) bsfif <- mkSizedBypassFIFOF(3);
+    method Action enq(t x);
+        bsfif.enq(x);
+    endmethod
+    method Action deq = bsfif.deq;
+    method t first = bsfif.first;
+    method Bool notEmpty = bsfif.notEmpty;
+endmodule
 
 
 // Exercise 1
-module mkFifo(Fifo#(3,t)) provisos (Bits#(t,tSz));
-   // define your own 3-elements fifo here.     
+module mkFifo(Fifo#(3, t)) provisos (Bits#(t, tSz));
+    // define your own 3-elements fifo here.
+    // test mkCFifo3
+    // Fifo#(3, t) fifo <- mkCFifo3;
+    // method enq = fifo.enq;
+    // method deq = fifo.deq;
+    // method t first = fifo.first;
+    // method Bool notEmpty = fifo.notEmpty;
 
+    // test mkCF3Fifo
+    // Fifo#(3, t) fifo <- mkCF3Fifo;
+    // method enq = fifo.enq;
+    // method deq = fifo.deq;
+    // method t first = fifo.first;
+    // method Bool notEmpty = fifo.notEmpty;
+
+    // test mkCFBypassFifo3
+    // Fifo#(3, t) fifo <- mkCFBypassFifo3;
+    // method enq = fifo.enq;
+    // method deq = fifo.deq;
+    // method t first = fifo.first;
+    // method Bool notEmpty = fifo.notEmpty;
+
+    Ehr#(2, t) da <- mkEhr(?);
+    Ehr#(2, Bool) va <- mkEhr(False);
+    Ehr#(2, t) db <- mkEhr(?);
+    Ehr#(2, Bool) vb <- mkEhr(False);
+    Ehr#(2, t) dc <- mkEhr(?);
+    Ehr#(2, Bool) vc <- mkEhr(False);
+
+    let notEmpty_ = va[0];
+    let notFull_ = !vc[0];
+
+    rule canonicalize;
+        // writing: c
+        if (vc[1]) begin
+            // if writing c, and (b, a) is empty, then write a instead
+            if (!vb[1] && !va[1]) begin
+                // c -> a
+                da[1] <= dc[1];
+                va[1] <= True;
+                vc[1] <= False;
+            end
+            // if writing c, and b is not empty while a is empty, c->b, b->a
+            else if (vb[1] && !va[1]) begin
+                // b -> a
+                da[1] <= db[1];
+                va[1] <= True;
+                // c -> b
+                db[1] <= dc[1];
+                vb[1] <= True;
+                vc[1] <= False;
+            end
+            else if (!vb[1] && va[1]) begin
+                // c -> b
+                db[1] <= dc[1];
+                vb[1] <= True;
+                vc[1] <= False;
+            end
+        end else begin
+            // not writing now, move data
+            if (vb[1] && !va[1]) begin
+                // b -> a
+                da[1] <= db[1];
+                va[1] <= True;
+                vb[1] <= False;
+            end
+        end
+    endrule
+
+    method Action enq(t x) if (notFull_);
+        dc[0] <= x;
+        vc[0] <= True;
+    endmethod
+
+    method Action deq if (notEmpty_);
+        va[0] <= False;
+    endmethod
+
+    method t first if (notEmpty_);
+        return da[0];
+    endmethod
+
+    method notEmpty = notEmpty_;
 endmodule
 
 
 // Two elements conflict-free fifo given as black box
-module mkCFFifo( Fifo#(2, t) ) provisos (Bits#(t, tSz));
+module mkCFFifo(Fifo#(2, t)) provisos (Bits#(t, tSz));
     Ehr#(2, t) da <- mkEhr(?);
     Ehr#(2, Bool) va <- mkEhr(False);
     Ehr#(2, t) db <- mkEhr(?);
     Ehr#(2, Bool) vb <- mkEhr(False);
 
     rule canonicalize;
-        if( vb[1] && !va[1] ) begin
+        // if writing b, and a is empty, then write a instead
+        if (vb[1] && !va[1]) begin
             da[1] <= db[1];
             va[1] <= True;
             vb[1] <= False;
@@ -51,12 +213,13 @@ module mkCFFifo( Fifo#(2, t) ) provisos (Bits#(t, tSz));
     endmethod
 endmodule
 
-module mkCF3Fifo(Fifo#(3,t)) provisos (Bits#(t, tSz));
-    FIFO#(t) bsfif <-  mkSizedFIFO(3);
-    method Action enq( t x);
+module mkCF3Fifo(Fifo#(3, t)) provisos (Bits#(t, tSz));
+    FIFO#(t) bsfif <- mkSizedFIFO(3);
+    method Action enq(t x);
         bsfif.enq(x);
     endmethod
 
+    // Chiro: funtions with `()` and without `()` are the same?
     method Action deq();
         bsfif.deq();
     endmethod
@@ -69,4 +232,44 @@ module mkCF3Fifo(Fifo#(3,t)) provisos (Bits#(t, tSz));
         return True;
     endmethod
 
+endmodule
+
+module mkPipelineFifo(Fifo#(1, t)) provisos(Bits#(t, tSz));
+    Reg#(t) d <- mkRegU;
+    Ehr#(2, Bool) v <- mkEhr(False);
+
+    let notFull_ = !v[1];
+    let notEmpty_ = v[0];
+    // method Bool notFull = notFull_;
+    method Bool notEmpty = notEmpty_;
+    method Action enq(t x) if (notFull_);
+        d <= x;
+        v[1] <= True;
+    endmethod
+    method Action deq if (notEmpty_);
+        v[0] <= False;
+    endmethod
+    method t first if (notEmpty_);
+        return d;
+    endmethod
+endmodule
+
+module mkBypassFifo(Fifo#(1, t)) provisos(Bits#(t, tSz));
+    Ehr#(2, t) d <- mkEhr(?);
+    Ehr#(2, Bool) v <- mkEhr(False);
+
+    let notFull_ = !v[0];
+    let notEmpty_ = v[1];
+    // method Bool notFull = notFull_;
+    method Bool notEmpty = notEmpty_;
+    method Action enq(t x);
+        d[0] <= x;
+        v[0] <= True;
+    endmethod
+    method Action deq;
+        v[1] <= False;
+    endmethod
+    method t first;
+        return d[1];
+    endmethod
 endmodule

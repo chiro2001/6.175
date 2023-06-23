@@ -1,6 +1,9 @@
 import Vector::*;
 import Complex::*;
 
+// Chiro: `typedef' can be used to define const numbers
+// Chiro: can Bluespec read these options from config file or command line?
+// Chiro: does Bluespec have a way to define swicthes like `#ifdef'?
 typedef 8 DataSz;
 typedef Bit#(DataSz) Data;
 typedef Complex#(Data) ComplexData;
@@ -42,15 +45,15 @@ module mkBfly4(Bfly4);
 endmodule
 
 function ComplexData getTwiddle(StageIdx stage, FftIdx index);
-    return cmplx(zeroExtend(index)/(2+zeroExtend(stage)/fromInteger(fftPoints)), 
-            zeroExtend(index)/(1+zeroExtend(stage)/fromInteger(fftPoints)));
+    return cmplx(zeroExtend(index) / (2 + zeroExtend(stage) / fromInteger(fftPoints)), 
+        zeroExtend(index) / (1 + zeroExtend(stage) / fromInteger(fftPoints)));
 endfunction
 
-function Vector#(FftPoints,ComplexData) permute(Vector#(FftPoints,ComplexData) inVector);
-    Vector#(FftPoints,ComplexData) outVector = newVector;
-    for(Integer i = 0; i < valueof(FftPoints)/2; i=i+1) begin
-        outVector[i] =  inVector[i*2];
-        outVector[i + fftPoints/2 ] = inVector[i*2+1];
+function Vector#(FftPoints, ComplexData) permute(Vector#(FftPoints, ComplexData) inVector);
+    Vector#(FftPoints, ComplexData) outVector = newVector;
+    for(Integer i = 0; i < valueof(FftPoints) / 2; i = i + 1) begin
+        outVector[i] = inVector[i * 2];
+        outVector[i + fftPoints / 2] = inVector[i * 2 + 1];
     end
     return outVector;
 endfunction

@@ -155,3 +155,39 @@ module mkTestBenchFifo();
     endrule
 endmodule
 
+(* synthesize *)
+module mkTbFifoTestConflict();
+    Fifo#(3, int) fifo <- mkFifo;
+    // Fifo#(1, int) fifo <- mkBypassFifo;
+    Reg#(int) cnt <- mkReg(0);
+
+    let maxCnt = 8;
+    // test delay
+    // let minCnt = 0;
+    // test size
+    let minCnt = 2;
+
+    rule inc_cnt (cnt < maxCnt);
+        cnt <= cnt + 1;
+    endrule
+
+    rule feed (cnt < maxCnt);
+        fifo.enq(cnt);
+        $display("[cycle %d] Enqueue %d", cnt, cnt);
+    endrule
+
+    rule pop (minCnt <= cnt && cnt < maxCnt);
+        fifo.deq;
+        let val = fifo.first;
+        $display("[cycle %d] Dequeue %d", cnt, val);
+    endrule
+
+    rule every_cycle;
+        $display("[cycle %d] ==== END ====", cnt);
+    endrule
+
+    rule fin (cnt == maxCnt);
+        $display("DONE");
+        $finish;
+    endrule
+endmodule

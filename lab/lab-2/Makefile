@@ -11,10 +11,13 @@ inelastic: compile
 elastic: compile
 	bsc -sim -e mkTbFftElasticPipeline -bdir buildDir -info-dir buildDir -simdir buildDir -o simElastic
 
+conflit: compile
+	bsc -sim -e mkTbFifoTestConflict -bdir buildDir -info-dir buildDir -simdir buildDir -o simConflit
+
 all: fifo inelastic elastic
 
 clean:
 	rm -rf buildDir sim*
 
-.PHONY: clean all inelastic elastic fifo compile
+.PHONY: clean all inelastic elastic fifo compile conflit
 .DEFAULT_GOAL := all
