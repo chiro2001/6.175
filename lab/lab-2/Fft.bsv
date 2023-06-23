@@ -223,7 +223,10 @@ module mkFftElasticPipeline(Fft);
     // Vector#(NumStages, Fifo#(2, FftFrameData)) stages <- replicateM(mkCFFifo);
     // using my CFifo3, finish at #193
     // Vector#(NumStages, Fifo#(3, FftFrameData)) stages <- replicateM(mkCFifo3);
-    Vector#(NumStages, Fifo#(3, FftFrameData)) stages <- replicateM(mkFifo);
+    // using mkFifo, finish at #193
+    // Vector#(NumStages, Fifo#(3, FftFrameData)) stages <- replicateM(mkFifo);
+    // using BypassFifo, finish at #? FIXME: mkBypassFifo differs from mkBypassFIFO
+    Vector#(NumStages, Fifo#(1, FftFrameData)) stages <- replicateM(mkBypassFifo);
     
 
     rule input_to_stages;

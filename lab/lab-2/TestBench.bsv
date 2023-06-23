@@ -165,7 +165,9 @@ module mkTbFifoTestConflict();
     // test delay
     // let minCnt = 0;
     // test size
-    let minCnt = 2;
+    // let minCnt = 2;
+    // test full
+    let minCnt = 3;
 
     rule inc_cnt (cnt < maxCnt);
         cnt <= cnt + 1;

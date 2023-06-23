@@ -1,3 +1,5 @@
+![image-20230623211605518](Discuss.assets/image-20230623211605518.png)
+
 1. What is the source of the performance gap between your two elastic implementations (when it is using the class fifo and when it is using your own fifo)?
 
    您的两个弹性实现之间的性能差距的根源是什么（当它使用类 fifo 时和当它使用您自己的 fifo 时）？
@@ -12,10 +14,11 @@
    | `mkFIFO1`      | 1         | 不可并发                      | 258            |
    | `mkLFIFO`      | 2         | 在满时可并发                  | 193            |
    | `mkBypassFIFO` | 1         | 空满都可并发                  | 129            |
+   | `mkBypassFifo` | 1         | 空满都可并发                  | ?              |
    | `mkCFifo1`     | 1         | 不可并发                      | 258            |
    | `mkCFFifo`     | 2         | 非空非满时可并发              | 193            |
    | `mkCFifo3`     | 3         | 不可并发                      | 258            |
-   | `mkFifo`       | 3         |                               |                |
+   | `mkFifo`       | 3         | 非空非满可并发                | 193            |
 
    性能差距的根源是 FIFO 的并发性，即在各种情况下是否能尽可能多地完成 `enq` 和 `deq` 的并发。
 
