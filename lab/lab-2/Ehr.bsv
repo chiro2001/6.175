@@ -42,6 +42,9 @@ module mkEhr(t initVal, Ehr#(n, t) ifc) provisos(Bits#(t, tSz));
         ifc_to_return[i] =
             // Chiro: interfaces are also "return values" in BSV, 
             // Chiro: like "anomymous classes" in Java
+            // Interface 的真正的实现，也可以用 Monad 角度理解
+            // 可以 return interface / funciton / module 的实现
+            // see: 手册
             (interface Reg;
                 method Action _write(t x);
                     // Performs write

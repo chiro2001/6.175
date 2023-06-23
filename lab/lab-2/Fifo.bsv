@@ -126,7 +126,6 @@ module mkFifo(Fifo#(3, t)) provisos (Bits#(t, tSz));
     let notFull_ = !vc[0];
 
     rule canonicalize;
-        // FIXME: cannot full fill the data..?
         // writing: c
         if (vc[1]) begin
             // if writing c, and (b, a) is empty, then write a instead
@@ -263,11 +262,11 @@ module mkBypassFifo(Fifo#(1, t)) provisos(Bits#(t, tSz));
     let notEmpty_ = v[1];
     // method Bool notFull = notFull_;
     method Bool notEmpty = notEmpty_;
-    method Action enq(t x);
+    method Action enq(t x) if (notFull_);
         d[0] <= x;
         v[0] <= True;
     endmethod
-    method Action deq;
+    method Action deq if (notEmpty_);
         v[1] <= False;
     endmethod
     method t first;

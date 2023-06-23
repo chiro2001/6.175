@@ -225,7 +225,7 @@ module mkFftElasticPipeline(Fft);
     // Vector#(NumStages, Fifo#(3, FftFrameData)) stages <- replicateM(mkCFifo3);
     // using mkFifo, finish at #193
     // Vector#(NumStages, Fifo#(3, FftFrameData)) stages <- replicateM(mkFifo);
-    // using BypassFifo, finish at #? FIXME: mkBypassFifo differs from mkBypassFIFO
+    // using BypassFifo, finish at #129
     Vector#(NumStages, Fifo#(1, FftFrameData)) stages <- replicateM(mkBypassFifo);
     
 
