@@ -90,6 +90,53 @@ endfunction
 // Exercise 6
 // Booth Multiplier
 module mkBoothMultiplier(Multiplier#(n));
+    Reg#(Bit#(TAdd#(n, n))) product <- mkReg('0);
+    Reg#(Bit#(n)) a <- mkReg('0);
+    // an extra bit is needed for pairing
+    Reg#(Bit#(TAdd#(1, n))) b <- mkReg('0);
+    Reg#(Bit#(TAdd#(1, TLog#(n)))) i <- mkReg('0);
+    Reg#(Bool) started <- mkReg(False);
+
+    Int#(TAdd#(n, n)) signed_a = unpack(signExtend(a));
+    Int#(TAdd#(n, n)) minus_a = -unpack(signExtend(a));
+
+    let b_part = b[1:0];
+    function Bit#(TAdd#(n, n)) getAddValue();
+        Bit#(TAdd#(n, n)) add_value = '0;
+        case (b_part)
+            2'b01: add_value = pack(signed_a) << i;
+            2'b10: add_value = pack(minus_a) << i;
+            default: add_value = '0;
+        endcase
+        return add_value;
+    endfunction
+
+    rule calculate if (started && i < fromInteger(valueOf(n)));
+        Bit#(TAdd#(n, n)) add_value = getAddValue();
+        // $display("Calculating i=%d, add_value=%d", i, add_value);
+        product <= (i == 0 ? '0 : product) + add_value;
+        i <= i + 1;
+        // b <= b >> 1;
+        b <= arth_shift(b, 1, True);
+    endrule
+
+    let result_ready_ = i == fromInteger(valueOf(n));
+    method start_ready = !started;
+    method result_ready = result_ready_;
+    method Action start(Bit#(n) a_, Bit#(n) b_) if (!started);
+        // $display("Starting multiplication");
+        a <= a_;
+        b <= {b_, '0};
+        i <= '0;
+        product <= '0;
+        started <= True;
+    endmethod
+    method ActionValue#(Bit#(TAdd#(n, n))) result() if (result_ready_);
+        // $display("Returning result %d", product);
+        started <= False;
+        i <= '0;
+        return product;
+    endmethod
 endmodule
 
 

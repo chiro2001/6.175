@@ -100,6 +100,9 @@ endmodule
 // Exercise 7
 (* synthesize *)
 module mkTbEx7a();
+    Multiplier#(8) dut <- mkBoothMultiplier();
+    Empty tb <- mkTbMulModule(dut, multiply_signed, True);
+    return tb;
 endmodule
 
 // Exercise 7
