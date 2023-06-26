@@ -1,10 +1,10 @@
-import Types::*;
-import MemTypes::*;
-import CacheTypes::*;
-import RefTypes::*;
-import Vector::*;
-import Ehr::*;
-import FShow::*;
+import Types :: *;
+import MemTypes :: *;
+import CacheTypes :: *;
+import RefTypes :: *;
+import Vector :: *;
+import Ehr :: *;
+import FShow :: *;
 
 // here we assume rid is a unique ID for each mem req
 // this only holds when DEBUG is defined

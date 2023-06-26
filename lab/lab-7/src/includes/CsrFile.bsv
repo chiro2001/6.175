@@ -11,11 +11,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 
-import Types::*;
-import ProcTypes::*;
-import Ehr::*;
-import ConfigReg::*;
-import Fifo::*;
+import Types :: *;
+import ProcTypes :: *;
+import Ehr :: *;
+import ConfigReg :: *;
+import Fifo :: *;
 
 interface CsrFile;
     method Action start(Data id);

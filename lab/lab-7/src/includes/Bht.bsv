@@ -1,7 +1,7 @@
-import Types::*;
-import ProcTypes::*;
-import RegFile::*;
-import Vector::*;
+import Types :: *;
+import ProcTypes :: *;
+import RegFile :: *;
+import Vector :: *;
 
 interface Bht#(numeric type bhtIndex);
     method Addr ppcDP(Addr pc, Addr targetPC);

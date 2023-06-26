@@ -1,5 +1,5 @@
-import Vector::*;
-import Complex::*;
+import Vector :: *;
+import Complex :: *;
 
 // Chiro: `typedef' can be used to define const numbers
 // Chiro: can Bluespec read these options from config file or command line?

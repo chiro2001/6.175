@@ -1,13 +1,13 @@
-import RegFile::*;
-import StmtFSM::*;
-import Vector::*;
+import RegFile :: *;
+import StmtFSM :: *;
+import Vector :: *;
 
-import Fifo::*;
-import Types::*;
-import MemTypes::*;
-import CacheTypes::*;
-import MessageFifo::*;
-import PPP::*;
+import Fifo :: *;
+import Types :: *;
+import MemTypes :: *;
+import CacheTypes :: *;
+import MessageFifo :: *;
+import PPP :: *;
 
 // Dummy WideMem module for testing, only has address 0
 // init mem value is 0

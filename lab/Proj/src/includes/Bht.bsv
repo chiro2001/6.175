@@ -1,7 +1,7 @@
-import Types::*;
-import ProcTypes::*;
-import RegFile::*;
-import Vector::*;
+import Types :: *;
+import ProcTypes :: *;
+import RegFile :: *;
+import Vector :: *;
 
 
 // Counter functions

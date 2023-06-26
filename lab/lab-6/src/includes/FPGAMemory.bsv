@@ -1,7 +1,7 @@
-import Types::*;
-import CMemTypes::*;
-import MemInit::*;
-import BRAM::*;
+import Types :: *;
+import CMemTypes :: *;
+import MemInit :: *;
+import BRAM :: *;
 
 interface FPGAMemory;
     method Action req(MemReq r);

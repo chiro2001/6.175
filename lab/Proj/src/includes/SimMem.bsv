@@ -1,10 +1,10 @@
-import MemTypes::*;
-import Vector::*;
-import RegFile::*;
-import Fifo::*;
-import GetPut::*;
-import ClientServer::*;
-import Connectable::*;
+import MemTypes :: *;
+import Vector :: *;
+import RegFile :: *;
+import Fifo :: *;
+import GetPut :: *;
+import ClientServer :: *;
+import Connectable :: *;
 
 // simulate a memory with pipelined delay
 typedef 10 MemDelay;

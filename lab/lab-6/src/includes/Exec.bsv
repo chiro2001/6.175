@@ -15,10 +15,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 
-import Types::*;
-import CMemTypes::*;
-import ProcTypes::*;
-import Vector::*;
+import Types :: *;
+import CMemTypes :: *;
+import ProcTypes :: *;
+import Vector :: *;
 
 (* noinline *)
 function Data alu(Data a, Data b, AluFunc func);

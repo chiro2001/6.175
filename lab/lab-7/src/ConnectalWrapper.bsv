@@ -1,50 +1,50 @@
-import ProcTypes::*;
+import ProcTypes :: *;
 
 `ifdef ONECYCLE
-import OneCycle::*;
+import OneCycle :: *;
 `endif
 `ifdef TWOCYCLE
-import TwoCycle::*;
+import TwoCycle :: *;
 `endif
 `ifdef TWOSTAGE
-import TwoStage::*;
+import TwoStage :: *;
 `endif
 `ifdef TWOSTAGEBTB
-import TwoStageBTB::*;
+import TwoStageBTB :: *;
 `endif
 `ifdef FOURCYCLE
-import FourCycle::*;
+import FourCycle :: *;
 `endif
 `ifdef SIXSTAGE
-import SixStage::*;
+import SixStage :: *;
 `endif
 `ifdef SIXSTAGEBHT 
-import SixStageBHT::*;
+import SixStageBHT :: *;
 `endif
 `ifdef SIXSTAGEBONUS
-import SixStageBonus::*;
+import SixStageBonus :: *;
 `endif
 `ifdef SIXSTAGERAS
-import SixStageRAS::*;
+import SixStageRAS :: *;
 `endif
 `ifdef WITHCACHE
-import WithCache::*;
+import WithCache :: *;
 `endif
 `ifdef WITHOUTCACHE
-import WithoutCache::*;
+import WithoutCache :: *;
 `endif
 
-import Ifc::*;
-import ProcTypes::*;
-import Types::*;
-import Ehr::*;
-import Fifo::*;
-import MemUtil::*;
-import MemTypes::*;
-import Memory::*;
-import SimMem::*;
-import ClientServer::*;
-import Clocks::*;
+import Ifc :: *;
+import ProcTypes :: *;
+import Types :: *;
+import Ehr :: *;
+import Fifo :: *;
+import MemUtil :: *;
+import MemTypes :: *;
+import Memory :: *;
+import SimMem :: *;
+import ClientServer :: *;
+import Clocks :: *;
 
 interface ConnectalWrapper;
    interface ConnectalProcRequest connectProc;

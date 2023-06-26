@@ -1,6 +1,6 @@
-import MemTypes::*;
-import Types::*;
-import Vector::*;
+import MemTypes :: *;
+import Types :: *;
+import Vector :: *;
 
 typedef 16 CacheLineWords; // to match DDR3 width
 typedef TMul#(CacheLineWords, 4) CacheLineBytes;

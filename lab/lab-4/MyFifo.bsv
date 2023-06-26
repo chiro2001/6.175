@@ -1,5 +1,5 @@
-import Ehr::*;
-import Vector::*;
+import Ehr :: *;
+import Vector :: *;
 
 //////////////////
 // Fifo interface 

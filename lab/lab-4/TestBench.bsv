@@ -1,5 +1,5 @@
-import TestBenchTemplates::*;
-import MyFifo::*;
+import TestBenchTemplates :: *;
+import MyFifo :: *;
 
 //////////////////////////
 // Functional Testbenches

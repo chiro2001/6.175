@@ -1,18 +1,18 @@
-import ProcTypes::*;
+import ProcTypes :: *;
 
-import Proc::*;
-import Ifc::*;
-import ProcTypes::*;
-import Types::*;
-import Ehr::*;
-import MemTypes::*;
-import GetPut::*;
-import SimMem::*;
-import Fifo::*;
-import MemUtil::*;
-import Memory::*;
-import ClientServer::*;
-import GetPut::*;
+import Proc :: *;
+import Ifc :: *;
+import ProcTypes :: *;
+import Types :: *;
+import Ehr :: *;
+import MemTypes :: *;
+import GetPut :: *;
+import SimMem :: *;
+import Fifo :: *;
+import MemUtil :: *;
+import Memory :: *;
+import ClientServer :: *;
+import GetPut :: *;
 
 interface ConnectalWrapper;
    interface ConnectalProcRequest connectProc;

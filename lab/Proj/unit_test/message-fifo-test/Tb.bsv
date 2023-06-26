@@ -1,9 +1,9 @@
-import StmtFSM::*;
-import Vector::*;
+import StmtFSM :: *;
+import Vector :: *;
 
-import MessageFifo::*;
-import CacheTypes::*;
-import Types::*;
+import MessageFifo :: *;
+import CacheTypes :: *;
+import Types :: *;
 
 // This tests two things about the message FIFO:
 //  1) can you enq and deq with this fifo?

@@ -1,13 +1,13 @@
-import CacheTypes::*;
-import Vector::*;
-import FShow::*;
-import MemTypes::*;
-import Types::*;
-import ProcTypes::*;
-import Fifo::*;
-import Ehr::*;
-import RefTypes::*;
-import StQ::*;
+import CacheTypes :: *;
+import Vector :: *;
+import FShow :: *;
+import MemTypes :: *;
+import Types :: *;
+import ProcTypes :: *;
+import Fifo :: *;
+import Ehr :: *;
+import RefTypes :: *;
+import StQ :: *;
 
 
 typedef enum{Ready, StartMiss, SendFillReq, WaitFillResp, Resp} CacheStatus

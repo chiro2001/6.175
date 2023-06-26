@@ -1,7 +1,7 @@
-import Types::*;
-import ProcTypes::*;
-import RegFile::*;
-import Vector::*;
+import Types :: *;
+import ProcTypes :: *;
+import RegFile :: *;
+import Vector :: *;
 
 // indexSize is the number of bits in the index
 interface Btb#(numeric type indexSize);

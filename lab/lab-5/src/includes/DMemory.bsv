@@ -11,10 +11,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 
-import Types::*;
-import MemTypes::*;
-import RegFile::*;
-import MemInit::*;
+import Types :: *;
+import MemTypes :: *;
+import RegFile :: *;
+import MemInit :: *;
 
 interface DMemory;
     method ActionValue#(MemResp) req(MemReq r);

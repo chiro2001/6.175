@@ -1,4 +1,4 @@
-import MemTypes::*;
+import MemTypes :: *;
 
 interface MemReqIDGen;
 	method ActionValue#(MemReqID) getID;

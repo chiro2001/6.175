@@ -1,28 +1,28 @@
-import Vector::*;
-import GetPut::*;
-import ClientServer::*;
-import ProcTypes::*;
-import Types::*;
-import MemTypes::*;
-import CacheTypes::*;
-import MemUtil::*;
-import WideMemInit::*;
-import Fifo::*;
-import MessageFifo::*;
-import MessageRouter::*;
-import PPP::*;
-import RefTypes::*;
-import RefSCMem::*;
-import RefTSOMem::*;
-import RefDummyMem::*;
+import Vector :: *;
+import GetPut :: *;
+import ClientServer :: *;
+import ProcTypes :: *;
+import Types :: *;
+import MemTypes :: *;
+import CacheTypes :: *;
+import MemUtil :: *;
+import WideMemInit :: *;
+import Fifo :: *;
+import MessageFifo :: *;
+import MessageRouter :: *;
+import PPP :: *;
+import RefTypes :: *;
+import RefSCMem :: *;
+import RefTSOMem :: *;
+import RefDummyMem :: *;
 
 
 `ifdef THREECYCLE
-import ThreeCycle::*;
+import ThreeCycle :: *;
 `endif
 
 `ifdef SIXSTAGE
-import SixStage::*;
+import SixStage :: *;
 `endif
 
 

@@ -1,15 +1,15 @@
 
-import GetPut::*;
-import BRAM::*;
+import GetPut :: *;
+import BRAM :: *;
 
-import Types::*;
-import MemTypes::*;
-import RegFile::*;
+import Types :: *;
+import MemTypes :: *;
+import RegFile :: *;
 
-import MemUtil::*;
-import Fifo::*;
-import Memory::*;
-import CacheTypes::*;
+import MemUtil :: *;
+import Fifo :: *;
+import Memory :: *;
+import CacheTypes :: *;
 
 module mkMemInitRegFile(RegFile#(Bit#(16), Data) mem, MemInitIfc ifc);
     Reg#(Bool) initialized <- mkReg(False);

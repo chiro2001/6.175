@@ -10,9 +10,9 @@
 // ehr[1]._read     |       CF              >               CF              <
 // ehr[1]._write    |       >               >               >               C
 
-import Vector::*;
-import RWire::*;
-import RevertingVirtualReg::*;
+import Vector :: *;
+import RWire :: *;
+import RevertingVirtualReg :: *;
 
 typedef Vector#(n, Reg#(t)) Ehr#(numeric type n, type t);
 

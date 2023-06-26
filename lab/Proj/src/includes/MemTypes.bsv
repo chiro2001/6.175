@@ -1,6 +1,6 @@
-import GetPut::*;
-import Types::*;
-import Memory::*;
+import GetPut :: *;
+import Types :: *;
+import Memory :: *;
 
 typedef Data MemResp;
 

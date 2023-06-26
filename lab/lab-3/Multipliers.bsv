@@ -97,15 +97,15 @@ module mkBoothMultiplier(Multiplier#(n));
     Reg#(Bit#(TAdd#(1, TLog#(n)))) i <- mkReg('0);
     Reg#(Bool) started <- mkReg(False);
 
-    Int#(TAdd#(n, n)) signed_a = unpack(signExtend(a));
-    Int#(TAdd#(n, n)) minus_a = -unpack(signExtend(a));
+    Int#(TAdd#(n, n)) pos_a = unpack(signExtend(a));
+    Int#(TAdd#(n, n)) neg_a = -unpack(signExtend(a));
 
     let b_part = b[1:0];
     function Bit#(TAdd#(n, n)) getAddValue();
         Bit#(TAdd#(n, n)) add_value = '0;
         case (b_part)
-            2'b01: add_value = pack(signed_a) << i;
-            2'b10: add_value = pack(minus_a) << i;
+            2'b01: add_value = pack(pos_a) << i;
+            2'b10: add_value = pack(neg_a) << i;
             default: add_value = '0;
         endcase
         return add_value;
@@ -123,6 +123,7 @@ module mkBoothMultiplier(Multiplier#(n));
     let result_ready_ = i == fromInteger(valueOf(n));
     method start_ready = !started;
     method result_ready = result_ready_;
+    // Chiro: function args name can be different from the interface
     method Action start(Bit#(n) a_, Bit#(n) b_) if (!started);
         // $display("Starting multiplication");
         a <= a_;
@@ -144,4 +145,63 @@ endmodule
 // Exercise 8
 // Radix-4 Booth Multiplier
 module mkBoothMultiplierRadix4(Multiplier#(n));
+    Reg#(Bit#(TAdd#(n, n))) product <- mkReg('0);
+    Reg#(Bit#(n)) a <- mkReg('0);
+    // an extra bit is needed for pairing
+    Reg#(Bit#(TAdd#(3, n))) b <- mkReg('0);
+    Reg#(Bit#(TAdd#(1, TLog#(n)))) i <- mkReg('0);
+    Reg#(Bool) started <- mkReg(False);
+
+    Int#(TAdd#(n, n)) pos_a = unpack(signExtend(a));
+    Int#(TAdd#(n, n)) neg_a = -unpack(signExtend(a));
+
+    let b_part = b[3:0];
+    function Bit#(TAdd#(n, n)) getAddValue();
+        Bit#(TAdd#(n, n)) add_value = 
+            (case (b_part)
+                4'b0001: return pack(pos_a);
+                4'b0010: return pack(pos_a);
+                4'b0011: return pack(pos_a) << 1;
+                4'b0100: return pack(pos_a) << 1;
+                4'b0101: return pack(pos_a) << 2;
+                4'b0110: return pack(pos_a) << 2;
+                4'b0111: return pack(pos_a) << 4;
+
+                4'b1000: return pack(neg_a) << 4;
+                4'b1001: return pack(neg_a) << 2;
+                4'b1010: return pack(neg_a) << 2;
+                4'b1011: return pack(neg_a) << 1;
+                4'b1100: return pack(neg_a) << 1;
+                4'b1101: return pack(neg_a);
+                4'b1110: return pack(neg_a);
+                default: return '0;
+            endcase) << i;
+        return add_value;
+    endfunction
+
+    rule calculate if (started && i < fromInteger(valueOf(n)));
+        Bit#(TAdd#(n, n)) add_value = getAddValue();
+        // $display("Calculating i=%d, add_value=%d", i, add_value);
+        product <= (i == 0 ? '0 : product) + add_value;
+        i <= i + 1;
+        b <= arth_shift(b, 1, True);
+    endrule
+
+    let result_ready_ = i == fromInteger(valueOf(n));
+    method start_ready = !started;
+    method result_ready = result_ready_;
+    method Action start(Bit#(n) a_, Bit#(n) b_) if (!started);
+        // $display("Starting multiplication");
+        a <= a_;
+        b <= {b_, '0};
+        i <= '0;
+        product <= '0;
+        started <= True;
+    endmethod
+    method ActionValue#(Bit#(TAdd#(n, n))) result() if (result_ready_);
+        // $display("Returning result %d", product);
+        started <= False;
+        i <= '0;
+        return product;
+    endmethod
 endmodule

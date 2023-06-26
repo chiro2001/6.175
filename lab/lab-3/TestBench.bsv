@@ -1,8 +1,8 @@
-import LFSR::*;
-import Vector::*;
+import LFSR :: *;
+import Vector :: *;
 
-import TestBenchTemplates::*;
-import Multipliers::*;
+import TestBenchTemplates :: *;
+import Multipliers :: *;
 
 // Example testbenches
 (* synthesize *)
@@ -116,6 +116,9 @@ endmodule
 // Exercise 9
 (* synthesize *)
 module mkTbEx9a();
+    Multiplier#(8) dut <- mkBoothMultiplierRadix4();
+    Empty tb <- mkTbMulModule(dut, multiply_signed, True);
+    return tb;
 endmodule
 
 // Exercise 9

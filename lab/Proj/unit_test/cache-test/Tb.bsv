@@ -1,13 +1,13 @@
-import StmtFSM::*;
-import Vector::*;
+import StmtFSM :: *;
+import Vector :: *;
 
-import Types::*;
-import MemTypes::*;
-import CacheTypes::*;
-import RefTypes::*;
-import RefDummyMem::*;
-import MessageFifo::*;
-import DCache::*;
+import Types :: *;
+import MemTypes :: *;
+import CacheTypes :: *;
+import RefTypes :: *;
+import RefDummyMem :: *;
+import MessageFifo :: *;
+import DCache :: *;
 
 (* synthesize *)
 module mkTb(Empty);

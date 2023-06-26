@@ -1,25 +1,25 @@
-import ProcTypes::*;
+import ProcTypes :: *;
 
 `ifdef ONECYCLE
-import OneCycle::*;
+import OneCycle :: *;
 `endif
 `ifdef TWOCYCLE
-import TwoCycle::*;
+import TwoCycle :: *;
 `endif
 `ifdef TWOSTAGE
-import TwoStage::*;
+import TwoStage :: *;
 `endif
 `ifdef TWOSTAGEBTB
-import TwoStageBTB::*;
+import TwoStageBTB :: *;
 `endif
 `ifdef FOURCYCLE
-import FourCycle::*;
+import FourCycle :: *;
 `endif
 
-import Ifc::*;
-import ProcTypes::*;
-import Types::*;
-import Ehr::*;
+import Ifc :: *;
+import ProcTypes :: *;
+import Types :: *;
+import Ehr :: *;
 
 interface ConnectalWrapper;
    interface ConnectalProcRequest connectProc;

@@ -1,11 +1,11 @@
-import Vector::*;
-import Complex::*;
+import Vector :: *;
+import Complex :: *;
 
-import FftCommon::*;
-import Fifo::*;
-import FIFOF::*;
-import FIFO::*;
-import SpecialFIFOs::*;
+import FftCommon :: *;
+import Fifo :: *;
+import FIFOF :: *;
+import FIFO :: *;
+import SpecialFIFOs :: *;
 
 interface Fft;
     method Action enq(Vector#(FftPoints, ComplexData) in);

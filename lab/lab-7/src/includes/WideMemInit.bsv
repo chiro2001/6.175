@@ -1,9 +1,9 @@
-import GetPut::*;
-import Types::*;
-import BRAM::*;
-import Fifo::*;
-import MemTypes::*;
-import Memory::*;
+import GetPut :: *;
+import Types :: *;
+import BRAM :: *;
+import Fifo :: *;
+import MemTypes :: *;
+import Memory :: *;
 
 module mkWideMemInitDDR3( Fifo#(n,DDR3_Req) reqQ, WideMemInitIfc ifc );
     // logic to initialize DRAM

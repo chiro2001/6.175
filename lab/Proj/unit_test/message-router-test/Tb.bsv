@@ -1,10 +1,10 @@
-import StmtFSM::*;
-import Vector::*;
+import StmtFSM :: *;
+import Vector :: *;
 
-import MessageFifo::*;
-import MessageRouter::*;
-import CacheTypes::*;
-import Types::*;
+import MessageFifo :: *;
+import MessageRouter :: *;
+import CacheTypes :: *;
+import Types :: *;
 
 // This tests some things about the message router:
 //  1) Messages get routed from children to the parent

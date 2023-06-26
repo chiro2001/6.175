@@ -1,10 +1,10 @@
-import RefTypes::*;
-import ProcTypes::*;
-import Types::*;
-import MemTypes::*;
-import CacheTypes::*;
-import Vector::*;
-import GetPut::*;
+import RefTypes :: *;
+import ProcTypes :: *;
+import Types :: *;
+import MemTypes :: *;
+import CacheTypes :: *;
+import Vector :: *;
+import GetPut :: *;
 
 (* synthesize *)
 module mkRefDummyMem(RefMem);

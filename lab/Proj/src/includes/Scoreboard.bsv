@@ -1,5 +1,5 @@
-import SFifo::*;
-import ProcTypes::*;
+import SFifo :: *;
+import ProcTypes :: *;
 
 interface Scoreboard#(numeric type size);
     method Action insert(Maybe#(RIndx) r);

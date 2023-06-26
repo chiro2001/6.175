@@ -1,8 +1,8 @@
 // Return Address Stack
-import Types::*;
-import ProcTypes::*;
-import RegFile::*;
-import Vector::*;
+import Types :: *;
+import ProcTypes :: *;
+import RegFile :: *;
+import Vector :: *;
 
 interface Ras#(numeric type stackSize);
     method Action push(Addr addr);

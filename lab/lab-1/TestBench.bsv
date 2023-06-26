@@ -1,8 +1,8 @@
-import Vector::*;
-import Randomizable::*;
-import Adders::*;
-import Multiplexer::*;
-import BarrelShifter::*;
+import Vector :: *;
+import Randomizable :: *;
+import Adders :: *;
+import Multiplexer :: *;
+import BarrelShifter :: *;
 
 // Mux testbenches
 

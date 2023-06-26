@@ -1,7 +1,7 @@
-import Types::*;
-import CMemTypes::*;
-import RegFile::*;
-import MemInit::*;
+import Types :: *;
+import CMemTypes :: *;
+import RegFile :: *;
+import MemInit :: *;
 
 interface IMemory;
     method MemResp req(Addr a);

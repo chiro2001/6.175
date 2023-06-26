@@ -17,11 +17,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 // In many designs where we needed Bypass register file, the bypassing was implemented outside the register file, explicitly.
 
 
-import Types::*;
-import ProcTypes::*;
-import Vector::*;
-import Ehr::*;
-import ConfigReg::*;
+import Types :: *;
+import ProcTypes :: *;
+import Vector :: *;
+import Ehr :: *;
+import ConfigReg :: *;
 
 interface RFile;
     method Action wr( RIndx rindx, Data data );

@@ -1,9 +1,9 @@
-import ProcTypes::*;
-import Types::*;
-import CacheTypes::*;
-import MemTypes::*;
-import GetPut::*;
-import Vector::*;
+import ProcTypes :: *;
+import Types :: *;
+import CacheTypes :: *;
+import MemTypes :: *;
+import GetPut :: *;
+import Vector :: *;
 
 // imported C function to handle monolithic memory
 import "BDPI" function ActionValue#(Bit#(64)) c_createMem(Bit#(32) addrWidth);

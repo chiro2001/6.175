@@ -1,7 +1,7 @@
-import Randomizable::*;
-import FIFOF::*;
-import MyFifo::*;
-import Ehr::*;
+import Randomizable :: *;
+import FIFOF :: *;
+import MyFifo :: *;
+import Ehr :: *;
 
 typedef enum { Conflict, Pipeline, Bypass, CF } FifoType deriving(Eq);
 

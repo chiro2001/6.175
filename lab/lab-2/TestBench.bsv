@@ -1,12 +1,12 @@
-import Vector::*;
-import Complex::*;
-import Real::*;
-import Randomizable::*;
+import Vector :: *;
+import Complex :: *;
+import Real :: *;
+import Randomizable :: *;
 
-import FftCommon::*;
-import Fft::*;
+import FftCommon :: *;
+import Fft :: *;
 
-import Fifo::*;
+import Fifo :: *;
 
 module mkTestBench#(Fft fft)();
     let fft_comb <- mkFftCombinational;

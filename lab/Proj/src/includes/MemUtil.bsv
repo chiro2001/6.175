@@ -1,10 +1,10 @@
-import Types::*;
-import ProcTypes::*;
-import MemTypes::*;
-import CacheTypes::*;
-import Fifo::*;
-import Vector::*;
-import Memory::*;
+import Types :: *;
+import ProcTypes :: *;
+import MemTypes :: *;
+import CacheTypes :: *;
+import Fifo :: *;
+import Vector :: *;
+import Memory :: *;
 
 function Bit#(TMul#(n,4)) wordEnToByteEn( Bit#(n) word_en );
     Bit#(TMul#(n,4)) byte_en;

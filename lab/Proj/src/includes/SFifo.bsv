@@ -1,6 +1,6 @@
-import Ehr::*;
-import Vector::*;
-import GetPut::*;
+import Ehr :: *;
+import Vector :: *;
+import GetPut :: *;
 
 //////////////////
 // SFifo interface 

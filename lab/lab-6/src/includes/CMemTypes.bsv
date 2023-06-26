@@ -1,7 +1,7 @@
 
-import GetPut::*;
+import GetPut :: *;
 
-import Types::*;
+import Types :: *;
 
 typedef Data MemResp;
 

@@ -1,6 +1,6 @@
-import MemTypes::*;
-import Types::*;
-import Vector::*;
+import MemTypes :: *;
+import Types :: *;
+import Vector :: *;
 
 typedef 16 CacheLineWords;
 typedef TMul#(CacheLineWords, 4) CacheLineBytes;

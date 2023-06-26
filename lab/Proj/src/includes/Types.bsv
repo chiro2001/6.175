@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 */
 
-import Vector::*;
+import Vector :: *;
 
 typedef 32 AddrSz;
 typedef Bit#(AddrSz) Addr;

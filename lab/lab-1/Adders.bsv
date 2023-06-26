@@ -1,4 +1,4 @@
-import Multiplexer::*;
+import Multiplexer :: *;
 
 function Bit#(1) fa_sum(Bit#(1) a, Bit#(1) b, Bit#(1) c);
     return a ^ b ^ c;

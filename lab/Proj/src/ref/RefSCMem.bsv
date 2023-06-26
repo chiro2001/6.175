@@ -1,14 +1,14 @@
-import ProcTypes::*;
-import Types::*;
-import MemTypes::*;
-import CacheTypes::*;
-import RefTypes::*;
-import Vector::*;
-import FShow::*;
-import Ehr::*;
-import Fifo::*;
-import GetPut::*;
-import RevertingVirtualReg::*;
+import ProcTypes :: *;
+import Types :: *;
+import MemTypes :: *;
+import CacheTypes :: *;
+import RefTypes :: *;
+import Vector :: *;
+import FShow :: *;
+import Ehr :: *;
+import Fifo :: *;
+import GetPut :: *;
+import RevertingVirtualReg :: *;
 
 (* synthesize *)
 module mkRefSCMem(RefMem);

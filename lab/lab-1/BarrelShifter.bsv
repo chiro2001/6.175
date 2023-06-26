@@ -1,4 +1,4 @@
-import Vector::*;
+import Vector :: *;
 
 function Bit#(32) shiftRightPow2(Bit#(1) en, Bit#(32) unshifted, Integer power);
     Integer distance = 2**power;

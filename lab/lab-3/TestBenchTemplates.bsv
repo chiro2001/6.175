@@ -1,6 +1,6 @@
-import Multipliers::*;
-import Randomizable::*;
-import FIFO::*;
+import Multipliers :: *;
+import Randomizable :: *;
+import FIFO :: *;
 
 
 // Function-Function Test Bench

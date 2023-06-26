@@ -1,8 +1,8 @@
-import Ehr::*;
-import Vector::*;
-import FIFO::*;
-import FIFOF::*;
-import SpecialFIFOs::*;
+import Ehr :: *;
+import Vector :: *;
+import FIFO :: *;
+import FIFOF :: *;
+import SpecialFIFOs :: *;
 
 interface Fifo#(numeric type n, type t);
     method Action enq(t x);
@@ -124,6 +124,9 @@ module mkFifo(Fifo#(3, t)) provisos (Bits#(t, tSz));
 
     let notEmpty_ = va[0];
     let notFull_ = !vc[0];
+
+    // TODO: simplify this
+    // addRules: Rules are also 'containers'
 
     rule canonicalize;
         // writing: c
@@ -273,3 +276,9 @@ module mkBypassFifo(Fifo#(1, t)) provisos(Bits#(t, tSz));
         return d[1];
     endmethod
 endmodule
+
+// TODO: 自己实现一遍上面的几种 FIFO，不用带长度。
+// TODO: 这些 FIFO 主要用于握手反压，可以用于 Valid/Ready 打拍。理解其中的关键路径和级联长度。
+// TODO: 反压的时候，如何解决其中的组合逻辑过长的问题？-> 逐级反压是如何使用这三种 FIFO 实现的？然后可以使用 DataFlow 来理解，有反压、分支等场景。
+
+// TODO: SkidBuffer, SpinalHDL S2M pipe

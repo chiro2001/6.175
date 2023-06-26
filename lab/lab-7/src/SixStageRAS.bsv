@@ -2,24 +2,24 @@
 //
 // This is a six stage implementation of the RISC-V processor
 
-import FIFOF::*;
-import Types::*;
-import ProcTypes::*;
-import CMemTypes::*;
-import RFile::*;
-import IMemory::*;
-import DMemory::*;
-import FPGAMemory::*;
-import Decode::*;
-import Exec::*;
-import CsrFile::*;
-import Fifo::*;
-import Ehr::*;
-import GetPut::*;
-import Scoreboard::*;
-import Btb::*;
-import Bht::*;
-import Ras::*;
+import FIFOF :: *;
+import Types :: *;
+import ProcTypes :: *;
+import CMemTypes :: *;
+import RFile :: *;
+import IMemory :: *;
+import DMemory :: *;
+import FPGAMemory :: *;
+import Decode :: *;
+import Exec :: *;
+import CsrFile :: *;
+import Fifo :: *;
+import Ehr :: *;
+import GetPut :: *;
+import Scoreboard :: *;
+import Btb :: *;
+import Bht :: *;
+import Ras :: *;
 
 typedef struct {
     Addr pc;
