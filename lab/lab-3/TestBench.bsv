@@ -7,6 +7,14 @@ import Multipliers::*;
 // Example testbenches
 (* synthesize *)
 module mkTbDumb();
+    // Empty tb <- mkTbMulFunction(multiply_unsigned, multiply_unsigned, True);
+    // return tb;
+    // function Bit#(16) test_function(Bit#(8) a, Bit#(8) b) = multiply_unsigned(a, b);
+    // function Bit#(16) ref_function(Bit#(8) a, Bit#(8) b) = multiply_unsigned(a, b);
+    // Empty tb <- mkTbMulFunction(test_function, ref_function, True);
+    // return tb;
+
+    // Chiro: can we use lambda functions?
     function Bit#(16) test_function(Bit#(8) a, Bit#(8) b) = multiply_unsigned(a, b);
     Empty tb <- mkTbMulFunction(test_function, multiply_unsigned, True);
     return tb;
@@ -21,12 +29,13 @@ endmodule
 
 // Exercise 1
 (* synthesize *)
-module mkTbSignedVsUnsigned();
+module mkTbMySignedVsUnsigned();
     Reg#(int) cnt <- mkReg(0);
     Reg#(int) cnt_err <- mkReg(0);
     let max_cnt = 512;
     let max_cnt_err = 32;
 
+    // not real random
     Vector#(2, LFSR#(Bit#(8))) lfsr;
 
     for (Integer i = 0; i < 2; i = i + 1) begin
@@ -64,9 +73,19 @@ module mkTbSignedVsUnsigned();
     endrule
 endmodule
 
+(* synthesize *)
+module mkTbSignedVsUnsigned();
+    function Bit#(16) test_function(Bit#(8) a, Bit#(8) b) = multiply_unsigned(a, b);
+    Empty tb <- mkTbMulFunction(test_function, multiply_signed, True);
+    return tb;
+endmodule
+
 // Exercise 3
 (* synthesize *)
 module mkTbEx3();
+    function Bit#(16) test_function(Bit#(8) a, Bit#(8) b) = multiply_by_adding(a, b);
+    Empty tb <- mkTbMulFunction(test_function, multiply_unsigned, True);
+    return tb;
 endmodule
 
 // Exercise 5

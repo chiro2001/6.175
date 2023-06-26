@@ -16,7 +16,20 @@ endfunction
 // Exercise 2
 // Multiplication by repeated addition
 function Bit#(TAdd#(n, n)) multiply_by_adding(Bit#(n) a, Bit#(n) b);
-    return '0;
+    // silly version
+    // Bit#(TAdd#(n, n)) out = '0;
+    // Bit#(TAdd#(n, n)) extended_b = zeroExtend(b);
+    // for (Bit#(n) i = 0; i < a; i = i + 1) begin
+    //     out = out + extended_b;
+    // end
+    // return out;
+
+    Bit#(TAdd#(n, n)) product = '0;
+    for (Integer i = 0; i < valueOf(n); i = i + 1) begin
+        // not best solution
+        product = product + (zeroExtend(unpack(a[i]) ? b : '0) << i);
+    end
+    return product;
 endfunction
 
 // Multiplier Interface
