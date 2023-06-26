@@ -44,6 +44,32 @@ endinterface
 // Exercise 4
 // Folded multiplier by repeated addition
 module mkFoldedMultiplier(Multiplier#(n));
+    Reg#(Bit#(TAdd#(n, n))) product <- mkReg('0);
+    Reg#(Bit#(n)) a <- mkRegU;
+    Reg#(Bit#(n)) b <- mkRegU;
+    Reg#(Bit#(TAdd#(1, TLog#(n)))) i <- mkReg('0);
+    Reg#(Bool) started <- mkReg(False);
+    rule acc if (started && i < fromInteger(valueOf(n)));
+        // $display("Accumulating i=%d", i);
+        product <= (i == 0 ? '0 : product) + (zeroExtend(unpack(a[0]) ? b : '0) << i);
+        i <= i + 1;
+        a <= a >> 1;
+    endrule
+    let result_ready_ = i == fromInteger(valueOf(n));
+    method start_ready = !started;
+    method result_ready = result_ready_;
+    method Action start(Bit#(n) a_, Bit#(n) b_) if (!started);
+        // $display("Starting multiplication");
+        a <= a_;
+        b <= b_;
+        started <= True;
+    endmethod
+    method ActionValue#(Bit#(TAdd#(n, n))) result() if (result_ready_);
+        // $display("Returning result %d", product);
+        started <= False;
+        i <= '0;
+        return product;
+    endmethod
 endmodule
 
 

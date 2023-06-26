@@ -23,7 +23,8 @@ endmodule
 (* synthesize *)
 module mkTbFoldedMultiplier();
     Multiplier#(8) dut <- mkFoldedMultiplier();
-    Empty tb <- mkTbMulModule(dut, multiply_signed, True);
+    // originally: singned
+    Empty tb <- mkTbMulModule(dut, multiply_unsigned, True);
     return tb;
 endmodule
 
@@ -91,6 +92,9 @@ endmodule
 // Exercise 5
 (* synthesize *)
 module mkTbEx5();
+    Multiplier#(8) dut <- mkFoldedMultiplier();
+    Empty tb <- mkTbMulModule(dut, multiply_by_adding, True);
+    return tb;
 endmodule
 
 // Exercise 7
