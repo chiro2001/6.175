@@ -135,5 +135,70 @@ endmodule
 //      {notFull, enq} CF {notEmpty, first, deq}
 //      {notFull, enq, notEmpty, first, deq} < clear
 module mkMyCFFifo(Fifo#(n, t)) provisos (Bits#(t, tSz));
+    Vector#(n, Reg#(t)) data <- replicateM(mkRegU);
+    // pointers
+    Ehr#(2, Bit#(TLog#(n))) wp <- mkEhr(0);
+    Ehr#(2, Bit#(TLog#(n))) rp <- mkEhr(0);
+    // use registers instead of pointer MSB
+    Ehr#(2, Bool) full <- mkEhr(False);
+    Ehr#(2, Bool) empty <- mkEhr(True);
+
+    // Ehr for methods
+    Ehr#(2, Maybe#(t)) req_enq <- mkEhr(tagged Invalid);
+    Ehr#(2, Bool) req_deq <- mkEhr(False);
+    Ehr#(2, Bool) req_clear <- mkEhr(False);
+
+    // this rule is always avaiable, should fire after all methods
+    (* no_implicit_conditions, fire_when_enabled *)
+    rule canonicalize;
+        let next_rp = (rp[0] == fromInteger(valueOf(n) - 1)) ? 0 : rp[0] + 1;
+        let next_wp = (wp[0] == fromInteger(valueOf(n) - 1)) ? 0 : wp[0] + 1;
+        let can_enq = !full[0] && isValid(req_enq[1]);
+        let can_deq = !empty[0] && req_deq[1];
+        // handle enq & deq concurrently
+        if (can_enq && can_deq) begin
+            data[wp[0]] <= fromMaybe(?, req_enq[1]);
+            wp[0] <= next_wp;
+            rp[0] <= next_rp;
+        end
+        // handle enq only
+        else if (can_enq) begin
+            full[0] <= next_wp == rp[0];
+            data[wp[0]] <= fromMaybe(?, req_enq[1]);
+            wp[0] <= next_wp;
+            empty[0] <= False;
+        end
+        // handle deq only
+        else if (can_deq) begin
+            empty[0] <= next_rp == wp[0];
+            rp[0] <= next_rp;
+            full[0] <= False;
+        end
+        // handle clear
+        if (req_clear[1]) begin
+            wp[1] <= 0;
+            rp[1] <= 0;
+            full[1] <= False;
+            empty[1] <= True;
+        end
+        // clear method ehrs
+        req_clear[1] <= False;
+        req_deq[1] <= False;
+        req_enq[1] <= tagged Invalid;
+    endrule
+
+    // in the same level 0
+    method notFull = !full[0];
+    method notEmpty = !empty[0];
+    method t first if (!empty[0]) = data[rp[0]];
+    method Action enq(t x) if (!full[0]);
+        req_enq[0] <= tagged Valid(x);
+    endmethod
+    method Action deq if (!empty[0]);
+        req_deq[0] <= True;
+    endmethod
+    method Action clear;
+        req_clear[0] <= True;
+    endmethod
 endmodule
 
