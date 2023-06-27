@@ -93,7 +93,38 @@ endmodule
 // Bypass FIFO
 // Intended schedule:
 //      {notFull, enq} < {notEmpty, first, deq} < clear
-module mkMyBypassFifo(Fifo#(n, t)) provisos (Bits#(t, tSz));
+module mkMyBypassFifo(Fifo#(n, t)) provisos (Bits#(t, tSz), Literal#(t));
+    Vector#(n, Ehr#(2, t)) data <- replicateM(mkEhr(0));
+    // pointers
+    Ehr#(3, Bit#(TLog#(n))) wp <- mkEhr(0);
+    Ehr#(3, Bit#(TLog#(n))) rp <- mkEhr(0);
+    // use registers instead of pointer MSB
+    Ehr#(3, Bool) full <- mkEhr(False);
+    Ehr#(3, Bool) empty <- mkEhr(True);
+
+    method notFull = !full[0];
+    method notEmpty = !empty[1];
+    method t first if (!empty[1]) = data[rp[1]][1];
+    method Action enq(t x) if (!full[0]);
+        data[wp[0]][0] <= x;
+        let next_wp = (wp[0] == fromInteger(valueOf(n) - 1)) ? 0 : wp[0] + 1;
+        wp[0] <= next_wp;
+        full[0] <= next_wp == rp[0];
+        empty[0] <= False;
+    endmethod
+    // can concurrently deq and enq when not full
+    method Action deq;
+        let next_rp = (rp[1] == fromInteger(valueOf(n) - 1)) ? 0 : rp[1] + 1;
+        rp[1] <= next_rp;
+        full[1] <= False;
+        empty[1] <= next_rp == wp[1];
+    endmethod
+    method Action clear;
+        wp[2] <= 0;
+        rp[2] <= 0;
+        full[2] <= False;
+        empty[2] <= True;
+    endmethod
 endmodule
 
 
