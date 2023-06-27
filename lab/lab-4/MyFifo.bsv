@@ -56,6 +56,37 @@ endmodule
 // Intended schedule:
 //      {notEmpty, first, deq} < {notFull, enq} < clear
 module mkMyPipelineFifo(Fifo#(n, t)) provisos (Bits#(t, tSz));
+    Vector#(n, Reg#(t)) data <- replicateM(mkRegU);
+    // pointers
+    Ehr#(3, Bit#(TLog#(n))) wp <- mkEhr(0);
+    Ehr#(3, Bit#(TLog#(n))) rp <- mkEhr(0);
+    // use registers instead of pointer MSB
+    Ehr#(3, Bool) full <- mkEhr(False);
+    Ehr#(3, Bool) empty <- mkEhr(True);
+
+    method notFull = !full[1];
+    method notEmpty = !empty[0];
+    method t first if (!empty[0]) = data[rp[0]];
+    method Action enq(t x) if (!full[1]);
+        data[wp[1]] <= x;
+        let next_wp = (wp[1] == fromInteger(valueOf(n) - 1)) ? 0 : wp[1] + 1;
+        wp[1] <= next_wp;
+        full[1] <= next_wp == rp[1];
+        empty[1] <= False;
+    endmethod
+    // can concurrently deq and enq when not full
+    method Action deq;
+        let next_rp = (rp[0] == fromInteger(valueOf(n) - 1)) ? 0 : rp[0] + 1;
+        rp[0] <= next_rp;
+        full[0] <= False;
+        empty[0] <= next_rp == wp[0];
+    endmethod
+    method Action clear;
+        wp[2] <= 0;
+        rp[2] <= 0;
+        full[2] <= False;
+        empty[2] <= True;
+    endmethod
 endmodule
 
 // Exercise 2
