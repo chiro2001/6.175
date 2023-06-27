@@ -155,45 +155,36 @@ module mkBoothMultiplierRadix4(Multiplier#(n));
     Int#(TAdd#(n, n)) pos_a = unpack(signExtend(a));
     Int#(TAdd#(n, n)) neg_a = -unpack(signExtend(a));
 
-    let b_part = b[3:0];
+    let b_part = b[2:0];
     function Bit#(TAdd#(n, n)) getAddValue();
         Bit#(TAdd#(n, n)) add_value = 
             (case (b_part)
-                4'b0001: return pack(pos_a);
-                4'b0010: return pack(pos_a);
-                4'b0011: return pack(pos_a) << 1;
-                4'b0100: return pack(pos_a) << 1;
-                4'b0101: return pack(pos_a) << 2;
-                4'b0110: return pack(pos_a) << 2;
-                4'b0111: return pack(pos_a) << 4;
-
-                4'b1000: return pack(neg_a) << 4;
-                4'b1001: return pack(neg_a) << 2;
-                4'b1010: return pack(neg_a) << 2;
-                4'b1011: return pack(neg_a) << 1;
-                4'b1100: return pack(neg_a) << 1;
-                4'b1101: return pack(neg_a);
-                4'b1110: return pack(neg_a);
+                3'b001: return pack(pos_a);
+                3'b010: return pack(pos_a);
+                3'b011: return pack(pos_a) << 1;
+                3'b100: return pack(neg_a) << 1;
+                3'b101: return pack(neg_a);
+                3'b110: return pack(neg_a);
                 default: return '0;
-            endcase) << i;
+            endcase) << (i << 1);
         return add_value;
     endfunction
 
-    rule calculate if (started && i < fromInteger(valueOf(n)));
+    rule calculate if (started && i < fromInteger(valueOf(n) / 2));
         Bit#(TAdd#(n, n)) add_value = getAddValue();
         // $display("Calculating i=%d, add_value=%d", i, add_value);
         product <= (i == 0 ? '0 : product) + add_value;
         i <= i + 1;
-        b <= arth_shift(b, 1, True);
+        b <= arth_shift(b, 2, True);
     endrule
 
-    let result_ready_ = i == fromInteger(valueOf(n));
+    let result_ready_ = i == fromInteger(valueOf(n) / 2);
     method start_ready = !started;
     method result_ready = result_ready_;
     method Action start(Bit#(n) a_, Bit#(n) b_) if (!started);
         // $display("Starting multiplication");
         a <= a_;
-        b <= {b_, '0};
+        b <= signExtend(b_) << 1;
         i <= '0;
         product <= '0;
         started <= True;

@@ -124,5 +124,8 @@ endmodule
 // Exercise 9
 (* synthesize *)
 module mkTbEx9b();
+    Multiplier#(32) dut <- mkBoothMultiplierRadix4();
+    Empty tb <- mkTbMulModule(dut, multiply_signed, True);
+    return tb;
 endmodule
 
