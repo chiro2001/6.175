@@ -3,11 +3,11 @@ module Ehr_tb ();
     localparam N = 32;
 
     reg clk;
-    reg rst;
+    reg rst_n;
 
     initial begin
-        rst <= 0;
-        #5 rst <= 1;
+        rst_n <= 0;
+        #5 rst_n <= 1;
         #100
         $finish;
     end
@@ -20,10 +20,10 @@ module Ehr_tb ();
 
     reg [N-1:0] cnt;
 
-    Ehr #(.N(N), .P(P)) u_Ehr(.clk(clk), .rst_n(rst), .wd(wd), .wv(wv), .r(r));
+    Ehr #(.N(N), .P(P)) u_Ehr(.clk(clk), .rst_n(rst_n), .wd(wd), .wv(wv), .r(r));
 
-    always @(posedge clk or negedge rst) begin
-        if (!rst) begin
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
             cnt <= 0;
         end
         else begin

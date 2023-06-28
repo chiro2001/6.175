@@ -1,12 +1,12 @@
 module Ehr2_tb ();
     parameter N = 32;
     reg clk;
-    reg rst;
+    reg rst_n;
 
     initial begin
         clk <= 0;
-        rst <= 0;
-        #8 rst <= 1;
+        rst_n <= 0;
+        #8 rst_n <= 1;
         #100 $finish;
     end
     always #1 clk <= ~clk;
@@ -23,7 +23,7 @@ module Ehr2_tb ();
         .N(N)
     ) u_Ehr2 (
         .clk(clk),
-        .rst_n(rst),
+        .rst_n(rst_n),
         .wd0(wd0),
         .wv0(wv0),
         .wd1(wd1),
@@ -33,7 +33,7 @@ module Ehr2_tb ();
     );
 
     always #2 begin
-        if (!rst) begin
+        if (!rst_n) begin
             cnt <= 0;
             wd0 <= 1;
             wd1 <= 2;

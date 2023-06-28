@@ -16,6 +16,18 @@ targets:
     type: simulation
     topModule: Ehr2_tb
     custom: false
+  - name: pipeline-fifo-sim
+    type: simulation
+    topModule: PipelineFifo_tb
+    custom: false
+  - name: bypass-fifo-sim
+    type: simulation
+    topModule: BypassFifo_tb
+    custom: false
+  - name: cf-fifo-sim
+    type: simulation
+    topModule: CFFifo_tb
+    custom: false
 - name: vivado
   toolchain: vivado
   options:
