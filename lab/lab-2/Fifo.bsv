@@ -154,7 +154,8 @@ module mkFifo(Fifo#(3, t)) provisos (Bits#(t, tSz));
                 vb[1] <= True;
                 vc[1] <= False;
             end
-        end else begin
+        end
+        else begin
             // not writing now, move data
             if (vb[1] && !va[1]) begin
                 // b -> a

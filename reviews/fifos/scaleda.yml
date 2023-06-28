@@ -1,0 +1,31 @@
+---
+name: fifos
+version: 0.1
+type: rtl
+source: src
+test: test
+targets:
+- name: iverilog
+  toolchain: iverilog
+  tasks:
+  - name: ehr-sim
+    type: simulation
+    topModule: Ehr_tb
+    custom: false
+  - name: ehr2-sim
+    type: simulation
+    topModule: Ehr2_tb
+    custom: false
+- name: vivado
+  toolchain: vivado
+  options:
+    part: xc7z010clg400-1
+  tasks:
+  - name: ehr-sim
+    type: simulation
+    topModule: Ehr_tb
+    custom: false
+  - name: ehr2-sim
+    type: simulation
+    topModule: Ehr2_tb
+    custom: false
